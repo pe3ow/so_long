@@ -6,7 +6,7 @@
 /*   By: lbardet- <lbardet-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 05:51:33 by lbardet-          #+#    #+#             */
-/*   Updated: 2025/10/30 06:44:38 by lbardet-         ###   ########.fr       */
+/*   Updated: 2025/10/31 08:27:44 by lbardet-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,20 @@ void	load_img(t_data *data)
 			"textures/exit.xpm", &width, &height);
 	data->img_collectible = mlx_xpm_file_to_image(data->mlx,
 			"textures/coin.xpm", &width, &height);
+	if (!data->img_wall || !data->img_floor || !data->img_player
+		|| !data->img_exit || !data->img_collectible)
+		clean_exit(data, 1);
 }
 
 void	draw_map(t_data *data)
 {
 	int		y;
 	int		x;
-	int		tile;
 	char	c;
 
 	y = 0;
-	tile = 32;
+	data->tile = 32;
+	load_img(data);
 	while (data->parsed_map[y])
 	{
 		x = 0;
@@ -47,7 +50,7 @@ void	draw_map(t_data *data)
 		{
 			c = data->parsed_map[y][x];
 			if (c == '1' || c == '0' || c == 'P' || c == 'C' || c == 'E')
-				put_image(data, x, y, tile);
+				put_image(data, x, y, c);
 			x++;
 		}
 		y++;
@@ -59,19 +62,26 @@ void	put_image(t_data *data, int x, int y, char c)
 	int	tile;
 
 	tile = 32;
+	mlx_put_image_to_window(data->mlx, data->win, data->img_floor,
+		x * data->tile, y * data->tile);
 	if (c == '1')
 		mlx_put_image_to_window(data->mlx, data->win, data->img_wall,
-			x * tile, y * tile);
+			x * data->tile, y * data->tile);
 	if (c == '0')
 		mlx_put_image_to_window(data->mlx, data->win, data->img_floor,
-			x * tile, y * tile);
-	if (c == 'P')
+			x * data->tile, y * data->tile);
+	if (c == 'P' && data->count == 0)
+	{
+		data->x = x;
+		data->y = y;
 		mlx_put_image_to_window(data->mlx, data->win, data->img_player,
-			x * tile, y * tile);
+			x * data->tile, y * data->tile);
+	}
 	if (c == 'C')
 		mlx_put_image_to_window(data->mlx, data->win, data->img_collectible,
-			x * tile, y * tile);
+			x * data->tile, y * data->tile);
 	if (c == 'E')
 		mlx_put_image_to_window(data->mlx, data->win, data->img_exit,
-			x * tile, y * tile);
+			x * data->tile, y * data->tile);
 }
+
