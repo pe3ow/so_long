@@ -6,7 +6,7 @@
 /*   By: lbardet- <lbardet-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 15:57:47 by lbardet-          #+#    #+#             */
-/*   Updated: 2025/10/31 10:12:20 by lbardet-         ###   ########.fr       */
+/*   Updated: 2025/11/08 09:58:22 by lbardet-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 #  define BUFFER_SIZE 1000
 # endif
 
-# include "minilibx-linux/mlx.h"
-# include "ft_printf/ft_printf.h"
+# include "mlx.h"
+# include "ft_printf.h"
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -42,6 +42,7 @@ typedef struct s_data
 	int			fd;
 	int			countcheck;
 	int			ix;
+	size_t		len_tab;
 	ssize_t		i;
 	ssize_t		end;
 	char		*map;
@@ -59,7 +60,7 @@ int		checkmandatories(t_data *data);
 int		checkmandatories2(t_data *data);
 int		checklen(t_data *data);
 int		checkwall(t_data *data);
-void	free_tab(t_data *data);
+void	free_tab(char **tab);
 void	load_img(t_data *data);
 void	draw_map(t_data *data);
 void	put_image(t_data *data, int x, int y, char c);
@@ -70,6 +71,11 @@ void	clean_exit(t_data *data, int code);
 int		handle_exit(t_data *data);
 void	floodfill(char	**filled_map, int x, int y);
 char	**ft_tabdup(const char **s);
-int		floodfill_check(char **filled_map);
+int		floodfill_check(char **filled_map, t_data *data);
+void	free_textures(t_data *data);
+char	*ft_strcpy(char *src, char *dest);
+void	free_tab2(char **tab);
+size_t	ft_tablen(const char	**tab);
+void	malloc_mlx(t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lbardet- <lbardet-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 03:45:15 by lbardet-          #+#    #+#             */
-/*   Updated: 2025/10/31 09:42:20 by lbardet-         ###   ########.fr       */
+/*   Updated: 2025/11/05 22:22:35 by lbardet-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,17 @@ int	checkmap(int fd, t_data *data)
 	if (data->end <= 0)
 	{
 		ft_printf("Error\n");
-		clean_exit(data, 1);
+		clean_exit(data, EXIT_FAILURE);
 	}
 	data->map[data->end] = 0;
 	data->parsed_map = ft_split(data->map, '\n');
-	if ((!checkmandatories(data)) || (!checkmandatories2(data)))
+	if ((!checkmandatories(data)) || (!checkmandatories2(data))
+		|| !checklen(data) || !checkwall(data))
 	{
 		ft_printf("Error\n");
-		clean_exit(data, 1);
-	}
-	if (!checklen(data) || !checkwall(data))
-	{
-		ft_printf("Error\n");
-		clean_exit(data, 1);
+		free_tab(data->parsed_map);
+		free(data->map);
+		clean_exit(data, EXIT_FAILURE);
 	}
 	return (1);
 }

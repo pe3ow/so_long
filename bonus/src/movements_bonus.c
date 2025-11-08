@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   movements.c                                        :+:      :+:    :+:   */
+/*   movements_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbardet- <lbardet-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 15:57:18 by lbardet-          #+#    #+#             */
-/*   Updated: 2025/10/31 08:20:35 by lbardet-         ###   ########.fr       */
+/*   Updated: 2025/11/08 09:59:03 by lbardet-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "so_long_bonus.h"
 
 int	handle_key(int key, t_data *data)
 {
@@ -24,11 +24,7 @@ int	handle_key(int key, t_data *data)
 	if (data->key == 115 || data->key == 65364)
 		down(data);
 	if (data->key == 65307)
-	{
-		mlx_destroy_window(data->mlx, data->win);
-		free_tab(data);
-		exit (0);
-	}
+		clean_exit(data, 0);
 	return (0);
 }
 
@@ -40,11 +36,17 @@ int	left(t_data *data)
 		data->parsed_map[data->y][data->x] = '0';
 	data->x -= 1;
 	data->count += 1;
-	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	if (data->parsed_map[data->y][data->x] == 'L')
+	{
+		ft_printf("You lost, Ghastly licked you!\n");
 		clean_exit(data, 0);
-	ft_printf("Movements : %d\n", data->count);
-	mlx_clear_window(data->mlx, data->win);
-	draw_map(data);
+	}
+	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	{
+		ft_printf("Victory !\n");
+		clean_exit(data, 0);
+	}
+	draw_map(data, 1);
 	mlx_put_image_to_window(data->mlx, data->win,
 		data->img_player, data->x * data->tile, data->y * data->tile);
 	return (0);
@@ -58,11 +60,17 @@ int	right(t_data *data)
 		data->parsed_map[data->y][data->x] = '0';
 	data->x += 1;
 	data->count += 1;
-	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	if (data->parsed_map[data->y][data->x] == 'L')
+	{
+		ft_printf("You lost, Ghastly licked you!\n");
 		clean_exit(data, 0);
-	ft_printf("Movements : %d\n", data->count);
-	mlx_clear_window(data->mlx, data->win);
-	draw_map(data);
+	}
+	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	{
+		ft_printf("Victory !\n");
+		clean_exit(data, 0);
+	}
+	draw_map(data, 2);
 	mlx_put_image_to_window(data->mlx, data->win,
 		data->img_player, data->x * data->tile, data->y * data->tile);
 	return (0);
@@ -76,11 +84,17 @@ int	up(t_data *data)
 		data->parsed_map[data->y][data->x] = '0';
 	data->y -= 1;
 	data->count += 1;
-	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	if (data->parsed_map[data->y][data->x] == 'L')
+	{
+		ft_printf("You lost, Ghastly licked you!\n");
 		clean_exit(data, 0);
-	ft_printf("Movements : %d\n", data->count);
-	mlx_clear_window(data->mlx, data->win);
-	draw_map(data);
+	}
+	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	{
+		ft_printf("Victory !\n");
+		clean_exit(data, 0);
+	}
+	draw_map(data, 3);
 	mlx_put_image_to_window(data->mlx, data->win,
 		data->img_player, data->x * data->tile, data->y * data->tile);
 	return (0);
@@ -94,11 +108,17 @@ int	down(t_data *data)
 		data->parsed_map[data->y][data->x] = '0';
 	data->y += 1;
 	data->count += 1;
-	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	if (data->parsed_map[data->y][data->x] == 'L')
+	{
+		ft_printf("You lost, Ghastly licked you!\n");
 		clean_exit(data, 0);
-	ft_printf("Movements : %d\n", data->count);
-	mlx_clear_window(data->mlx, data->win);
-	draw_map(data);
+	}
+	if (data->parsed_map[data->y][data->x] == 'E' && !lf_collectible(data))
+	{
+		ft_printf("Victory !\n");
+		clean_exit(data, 0);
+	}
+	draw_map(data, 4);
 	mlx_put_image_to_window(data->mlx, data->win,
 		data->img_player, data->x * data->tile, data->y * data->tile);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: lbardet- <lbardet-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 08:07:14 by lbardet-          #+#    #+#             */
-/*   Updated: 2025/10/31 10:02:43 by lbardet-         ###   ########.fr       */
+/*   Updated: 2025/11/05 20:28:09 by lbardet-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	floodfill(char **filled_map, int x, int y)
 	floodfill(filled_map, x, y - 1);
 }
 
-int	floodfill_check(char **filled_map)
+int	floodfill_check(char **filled_map, t_data *data)
 {
 	int	i;
 	int	j;
@@ -43,10 +43,14 @@ int	floodfill_check(char **filled_map)
 		while (filled_map[j][i])
 		{
 			if (filled_map[j][i] == 'C' || filled_map[j][i] == 'E')
+			{
+				free_tab(data->filled_map);
 				return (0);
+			}
 			i++;
 		}
 		j++;
 	}
+	free_tab(data->filled_map);
 	return (1);
 }

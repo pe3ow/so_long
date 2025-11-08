@@ -6,25 +6,25 @@
 /*   By: lbardet- <lbardet-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 05:11:11 by lbardet-          #+#    #+#             */
-/*   Updated: 2025/10/31 09:47:20 by lbardet-         ###   ########.fr       */
+/*   Updated: 2025/11/08 05:27:55 by lbardet-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	free_tab(t_data *data)
+void	free_tab(char **tab)
 {
 	int	i;
 
 	i = 0;
-	while (data->filled_map[i])
-		i++;
-	while (i != 0)
+	while (tab[i] != NULL)
 	{
-		free(data->filled_map[i]);
-		i --;
+		free(tab[i]);
+		tab[i] = NULL;
+		i ++;
 	}
-	free(data->filled_map);
+	free(tab);
+	tab = NULL;
 }
 
 int	ft_strlen(char *str)
@@ -61,47 +61,53 @@ int	lf_collectible(t_data *data)
 	return (data->collectible);
 }
 
-int	handle_exit(t_data *data)
+static char	*dup_str(const char *s)
 {
-	clean_exit(data, 0);
-	return (0);
+	char	*d;
+	size_t	i;
+	size_t	len;
+
+	if (!s)
+		return (NULL);
+	len = ft_strlen((char *)s);
+	d = malloc(len + 1);
+	if (!d)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	d[i] = '\0';
+	return (d);
 }
 
 char	**ft_tabdup(const char **s)
 {
 	char	**s2;
 	size_t	i;
-	size_t	j;
-	size_t	k;
+	size_t	n;
 
-	if (!s)
-		return (NULL);
-	j = 0;
-	while (s[j])
-		j++;
-	s2 = malloc((j + 1) * sizeof(char *));
+	n = 0;
+	while (s[n])
+		n++;
+	s2 = malloc((n + 1) * sizeof(char *));
 	if (!s2)
 		return (NULL);
 	i = 0;
-	while (i < j)
+	while (i < n)
 	{
-		s2[i] = malloc(ft_strlen((char *)s[i]) + 1);
+		s2[i] = dup_str(s[i]);
 		if (!s2[i])
 		{
-			while (i-- > 0)
-				free(s2[i]);
+			while (i > 0)
+				free(s2[--i]);
 			free(s2);
 			return (NULL);
 		}
-		k = 0;
-		while (s[i][k])
-		{
-			s2[i][k] = s[i][k];
-			k++;
-		}
-		s2[i][k] = '\0';
 		i++;
 	}
-	s2[j] = NULL;
+	s2[n] = NULL;
 	return (s2);
 }
